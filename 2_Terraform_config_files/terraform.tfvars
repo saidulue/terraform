@@ -1,0 +1,7 @@
+cidr_block = "10.0.0.0/16"
+name = "My-VPC"
+ami_id = "ami-02dfbd4ff395f2a1b"
+instance_type = "t2.micro"
+subnet_cidr_block = "10.0.1.0/24"
+availability_zone = "us-east-1a"
+instance_name = "My-EC2-Instance"
