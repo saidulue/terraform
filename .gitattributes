@@ -1,0 +1,9 @@
+# Shell scripts - always LF
+*.sh text eol=lf
+*.bash text eol=lf
+
+# PowerShell scripts - CRLF on Windows
+*.ps1 text eol=crlf
+
+# All text files - auto
+* text=auto
