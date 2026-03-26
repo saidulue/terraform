@@ -1,4 +1,6 @@
+# ============================================
 # VPC Configuration
+# ============================================
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -9,7 +11,9 @@ resource "aws_vpc" "main" {
   }
 }
 
+# ============================================
 # Subnet Configuration
+# ============================================
 resource "aws_subnet" "main" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.subnet_cidr
@@ -19,18 +23,30 @@ resource "aws_subnet" "main" {
   tags = {
     Name = "${var.environment}-subnet"
   }
+
+  depends_on = [aws_vpc.main]
 }
 
-# Internet Gateway
+# ============================================
+# Internet Gateway Configuration
+# ============================================
 resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
-
   tags = {
     Name = "${var.environment}-igw"
   }
 }
 
-# Route Table
+# Explicit IGW Attachment (better for deletion)
+resource "aws_internet_gateway_attachment" "main" {
+  internet_gateway_id = aws_internet_gateway.main.id
+  vpc_id              = aws_vpc.main.id
+
+  depends_on = [aws_internet_gateway.main, aws_vpc.main]
+}
+
+# ============================================
+# Route Table Configuration
+# ============================================
 resource "aws_route_table" "main" {
   vpc_id = aws_vpc.main.id
 
@@ -42,15 +58,21 @@ resource "aws_route_table" "main" {
   tags = {
     Name = "${var.environment}-route-table"
   }
+
+  depends_on = [aws_internet_gateway_attachment.main]
 }
 
 # Route Table Association
 resource "aws_route_table_association" "main" {
   subnet_id      = aws_subnet.main.id
   route_table_id = aws_route_table.main.id
+
+  depends_on = [aws_route_table.main, aws_subnet.main]
 }
 
-# Security Group
+# ============================================
+# Security Group Configuration
+# ============================================
 resource "aws_security_group" "main" {
   name        = "${var.environment}-sg"
   description = "Security group for ${var.environment} environment"
@@ -87,9 +109,13 @@ resource "aws_security_group" "main" {
   tags = {
     Name = "${var.environment}-sg"
   }
+
+  depends_on = [aws_vpc.main]
 }
 
-# EC2 Instance
+# ============================================
+# EC2 Instance Configuration
+# ============================================
 resource "aws_instance" "main" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -99,4 +125,6 @@ resource "aws_instance" "main" {
   tags = {
     Name = "${var.environment}-${var.instance_name}"
   }
+
+  depends_on = [aws_subnet.main, aws_security_group.main]
 }
