@@ -1,0 +1,9 @@
+aws_region       = "us-east-1"
+environment      = "test"
+vpc_cidr         = "10.1.0.0/16"
+vpc_name         = "testing-vpc"
+subnet_cidr      = "10.1.1.0/24"
+availability_zone = "us-east-1b"
+instance_type    = "t2.micro"
+ami_id           = "ami-02dfbd4ff395f2a1b"  # Ubuntu 22.04 LTS
+instance_name    = "webserver"

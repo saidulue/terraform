@@ -1,0 +1,43 @@
+# ============================================
+# Terraform State Files
+# ============================================
+terraform.tfstate
+terraform.tfstate.backup
+dev/terraform.tfstate*
+test/terraform.tfstate*
+prod/terraform.tfstate*
+
+# ============================================
+# Terraform Directories
+# ============================================
+.terraform/
+.terraform.lock.hcl
+*.tfstate.*.backup
+
+# ============================================
+# OS Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================================
+# Editor Files
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+
+# ============================================
+# IDE
+# ============================================
+.env
+.env.local
+*.log
